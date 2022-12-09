@@ -2,9 +2,7 @@
 
 This deploys my lab via terraform cloud in AWS us-west-1 Region.
 
-## How to deploy:
-
-### Deploys the following:
+## Deploys the following:
 From the examples directory, run the zsec bash script that walks to all required inputs.
 - New VPC
 - Public and Private Subnets in single AZ
