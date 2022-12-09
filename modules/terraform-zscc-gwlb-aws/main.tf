@@ -2,7 +2,7 @@
 # Configure target group
 ################################################################################
 resource "aws_lb_target_group" "gwlb_target_group" {
-  name        = "${var.name_prefix}-cc-target"
+  name        = "${var.name_prefix}-cc-target-${var.resource_tag}"
   port        = 6081
   protocol    = "GENEVE"
   vpc_id      = var.vpc_id
@@ -82,7 +82,7 @@ resource "aws_lb" "gwlb" {
   subnets = var.cc_subnet_ids
 
   tags = merge(var.global_tags,
-    { Name = "${var.name_prefix}-gwlb" }
+    { Name = "${var.name_prefix}-gwlb-${var.resource_tag}" }
   )
 }
 

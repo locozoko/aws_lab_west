@@ -23,7 +23,7 @@ resource "aws_security_group" "cc_mgmt_sg" {
   }
 
   tags = merge(var.global_tags,
-    { Name = "${var.name_prefix}-cc-mgmt-sg" }
+    { Name = "${var.name_prefix}-cc-mgmt-sg-${var.resource_tag}" }
   )
 }
 
@@ -62,7 +62,7 @@ resource "aws_security_group" "cc_service_sg" {
   }
 
   tags = merge(var.global_tags,
-    { Name = "${var.name_prefix}-cc-svc-sg" }
+    { Name = "${var.name_prefix}-cc-svc-sg-${var.resource_tag}" }
   )
 }
 

@@ -28,7 +28,7 @@ EOF
 
 # Create IAM Policy for Lambda
 resource "aws_iam_policy" "iam_policy_for_cc_lambda" {
-  name        = "${var.vpc_id}_cc_lambda_iam_policy"
+  name        = "${var.vpc_id}_cc_lambda_iam_policy-${var.resource_tag}"
   description = "IAM policy created for Checker lambda in ${var.vpc_id}"
 
   policy = <<EOF
@@ -94,7 +94,7 @@ data "aws_subnet" "cc_subnets" {
 # Create AWS Security Group and rules for Lambda
 ################################################################################
 resource "aws_security_group" "lambda_sg" {
-  name        = "${var.name_prefix}-port-probe-lambda-sg"
+  name        = "${var.name_prefix}-port-probe-lambda-sg-${var.resource_tag}"
   description = "Allow HTTP GET access to the specified port on CC"
   vpc_id      = var.vpc_id
 
@@ -118,7 +118,7 @@ resource "aws_security_group" "lambda_sg" {
   }
 
   tags = merge(var.global_tags,
-    { Name = "${var.name_prefix}-lambda-sg" }
+    { Name = "${var.name_prefix}-lambda-sg-${var.resource_tag}" }
   )
 
   depends_on = [aws_iam_role_policy_attachment.cc_lambda_execution_role_attachment]
@@ -157,7 +157,7 @@ resource "aws_lambda_function" "cc_route_updater_lambda" {
 # Create Cloudwatch rules, event targets, and triggers for failover execution
 ################################################################################
 resource "aws_cloudwatch_event_rule" "cc_checker_timer" {
-  name                = "${var.vpc_id}_cc_lambda_timer"
+  name                = "${var.vpc_id}_cc_lambda_timer-${var.resource_tag}"
   description         = "Fire every 1 min"
   schedule_expression = "rate(1 minute)"
 }
@@ -177,7 +177,7 @@ resource "aws_lambda_permission" "allow_timer_to_call_cc_checker_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "cc_state_change" {
-  name          = "${var.vpc_id}_cc_state_change"
+  name          = "${var.vpc_id}_cc_state_change-${var.resource_tag}"
   description   = "Subscribes to CC VM state changes"
   event_pattern = <<EOF
 {
@@ -218,5 +218,5 @@ resource "aws_lambda_permission" "allow_state_checker_to_call_cc_checker_lambda"
 }
 
 resource "aws_cloudwatch_log_group" "checker_log_group" {
-  name = "/aws/lambda/${var.vpc_id}_cc_route_updater_fn"
+  name = "/aws/lambda/${var.vpc_id}_cc_route_updater_fn-${var.resource_tag}"
 }

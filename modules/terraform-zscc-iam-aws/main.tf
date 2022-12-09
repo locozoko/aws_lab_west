@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "cc_callhome_policy_document" {
 resource "aws_iam_policy" "cc_callhome_policy" {
   count       = var.byo_iam == false && var.cc_callhome_enabled ? var.iam_count : 0
   description = "Policy which allows STS AssumeRole when attached to a user or role. Used for CC callhome"
-  name        = "${var.name_prefix}-cc-${count.index + 1}-callhome-policy"
+  name        = "${var.name_prefix}-cc-${count.index + 1}-callhome-policy-${var.resource_tag}"
   policy      = data.aws_iam_policy_document.cc_callhome_policy_document.json
 }
 
@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "cc_session_manager_policy_document" {
 resource "aws_iam_policy" "cc_session_manager_policy" {
   count       = var.byo_iam == false ? var.iam_count : 0
   description = "Policy which permits CCs to register to SSM Manager for Console Connect functionality"
-  name        = "${var.name_prefix}-cc-${count.index + 1}-ssm"
+  name        = "${var.name_prefix}-cc-${count.index + 1}-ssm-${var.resource_tag}"
   policy      = data.aws_iam_policy_document.cc_session_manager_policy_document.json
 }
 
@@ -115,7 +115,7 @@ data "aws_iam_policy_document" "cc_autoscale_lifecycle_policy_document" {
 resource "aws_iam_policy" "cc_autoscale_lifecycle_policy" {
   count       = var.byo_iam == false && var.asg_enabled == true ? var.iam_count : 0
   description = "Policy which permits CCs to send lifecycle actions when hook is enabled"
-  name        = "${var.name_prefix}-cc-${count.index + 1}-aslc"
+  name        = "${var.name_prefix}-cc-${count.index + 1}-aslc-${var.resource_tag}"
   policy      = data.aws_iam_policy_document.cc_autoscale_lifecycle_policy_document.json
 }
 
